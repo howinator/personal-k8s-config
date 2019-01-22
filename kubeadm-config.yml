@@ -1,0 +1,22 @@
+apiVersion: kubeadm.k8s.io/v1beta1
+kind: ClusterConfiguration
+etcd:
+  # one of local or external
+  local:
+    dataDir: "/var/lib/etcd"
+networking:
+  podSubnet: "192.168.0.0/16"
+apiServer:
+  certSANs:
+    - "master-1.personal-k8s.howinator.io"
+    - "165.227.243.120"
+    - "10.138.218.241"
+    - "2604:a880:2:d0::206d:5001"
+    - "68.183.171.203"
+    - "api-server.personal-k8s.howinator.io"
+# ---
+# apiVersion: kubeadm.k8s.io/v1beta1
+# kind: InitConfiguration
+# localAPIEndpoint:
+#   advertiseAddress: "165.227.243.120"  # TODO this should be a var
+#   bindPort: 6443

@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+    name: node-healthcheck
+    namespace: prod
+    labels:
+        name: node-healthcheck
+spec:
+    selector:
+        matchLabels:
+            name: node-healthcheck
+    template:
+        metadata:
+            labels:
+                app: node-healthcheck
+                name: node-healthcheck
+        spec:
+            containers:
+            - name: nginx
+              image: howinator/nginx-healthcheck:latest
+              ports:
+                  - containerPort: 80
+              resources:
+                  limits:
+                      memory: 5Mi
+                      cpu: 10m
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: node-healthcheck
+    namespace: prod
+    labels:
+        name: node-healthcheck
+spec:
+    type: NodePort
+    ports:
+    - port: 8080
+      nodePort: 31654
+      targetPort: 80
+      protocol: TCP
+      name: http
+    selector:
+        app: node-healthcheck
